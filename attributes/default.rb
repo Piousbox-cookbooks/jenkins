@@ -32,10 +32,8 @@ default[:jenkins][:plugins_site]     = "http://updates.jenkins-ci.org/download/p
 default[:jenkins][:plugins_site]     = "https://updates.jenkins-ci.org/latest/" # +"git.hpi"
 default[:jenkins][:nexus_repo]       = "nexus.local"
 default[:jenkins][:job_name]         = "petclinic-auto-1"
-default[:jenkins][:packages]         = %w(
-  maven
-  default-jdk
-)
+default[:ubuntu][:packages]          = %w( maven default-jdk )
+default[:centos][:packages]          = %w( maven java-1.7.0-openjdk )
 default[:jenkins][:plugins_list]     = %w( 
   credentials ssh-credentials mailer scm-api git git-client
   build-pipeline-plugin 

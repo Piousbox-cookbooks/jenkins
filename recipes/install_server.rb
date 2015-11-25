@@ -38,9 +38,14 @@ when 'redhat', 'centos', 'fedora'
   package 'jenkins'
 end
 
-node[:jenkins][:packages].each do |pkg|
-  package pkg do
-    action :install
+case node['platform']
+when 'debian', 'ubuntu'
+  node[:ubuntu][:packages].each do |pkg|
+    package pkg
+  end
+when 'redhat', 'centos', 'fedora'
+  node[:centos][:packages].each do |pkg|
+    package pkg
   end
 end
 
