@@ -14,8 +14,26 @@ end
 
 
 #
+# part of configuration of jenkins; install relevant pacjages (e.g. maven, java)
+#
+case node['platform']
+when 'debian', 'ubuntu'
+  node[:ubuntu][:packages].each do |pkg|
+    package pkg
+  end
+when 'redhat', 'centos', 'fedora'
+  node[:centos][:packages].each do |pkg|
+    package pkg
+  end
+end
+
+
+#
 # jenkins install
 #
+service "jenkins" do
+  action :nothing
+end
 case node['platform']
 when 'debian', 'ubuntu'
   execute "Install Jenkins the simple way on #{node['platform']}" do
@@ -35,19 +53,16 @@ when 'redhat', 'centos', 'fedora'
     EOH
     not_if " yum list installed jenkins "
   end
-  package 'jenkins'
+  package 'jenkins' do
+    action :install
+    notifies :restart, 'service[jenkins]', :immediately
+  end
 end
 
-case node['platform']
-when 'debian', 'ubuntu'
-  node[:ubuntu][:packages].each do |pkg|
-    package pkg
-  end
-when 'redhat', 'centos', 'fedora'
-  node[:centos][:packages].each do |pkg|
-    package pkg
-  end
-end
+
+
+
+
 
 
 
